@@ -54,7 +54,7 @@ bindkey '^n' history-search-forward
 # bindkey '^[w' kill-region
 
 # History
-HISTSIZE=5000
+HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
@@ -84,7 +84,7 @@ zinit light Aloxaf/fzf-tab # Requires fzf installed
 
 
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
-# zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath' # Requires zoxide installed
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -92,4 +92,4 @@ export NVM_DIR="$HOME/.nvm"
 
 # Shell integrations
 source <(fzf --zsh)
-# eval "$(zoxide init --cmd cd zsh)"
+eval "$(zoxide init --cmd cd zsh)"
