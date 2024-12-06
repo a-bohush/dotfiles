@@ -4,8 +4,7 @@
 ;; Add package archives
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
-        ("gnu" . "https://elpa.gnu.org/packages/")
-        ("org" . "https://orgmode.org/elpa/")))
+        ("gnu" . "https://elpa.gnu.org/packages/")))
 
 ;; Initialize the package system
 (package-initialize)
@@ -26,7 +25,6 @@
     smartparens
     highlight-symbol
     multiple-cursors
-    fastnav
     auto-indent-mode
     expand-region
     web-mode
@@ -35,7 +33,6 @@
     coffee-mode
     yaml-mode
     json-mode
-    org
     ace-window
     corfu
     cape
@@ -49,106 +46,90 @@
 
 ;; ;; ;;-------------------------------------------------
 
-(require 'neotree)
-(global-set-key [f8] 'neotree-toggle)
+(use-package neotree
+  :bind ([f8] . neotree-toggle))
 
-(require 'helm)
-;; (require 'helm-config)
-(helm-mode 1)
-;; ;; https://github.com/bbatsov/projectile
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-;; http://tuhdo.github.io/helm-projectile.html
-(projectile-global-mode)
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
-(setq projectile-switch-project-action 'helm-projectile)
+(use-package helm
+  :config
+  (require 'helm-autoloads)
+  (helm-mode 1))
 
-(require 'smartparens-config)
-(smartparens-global-mode 1)
+(use-package projectile
+  :config
+  (projectile-mode +1)
+  :bind-keymap ("C-c p" . projectile-command-map))
 
-(require 'highlight-symbol)
-(global-set-key [(control f3)] 'highlight-symbol)
-(global-set-key [f3] 'highlight-symbol-next)
-(global-set-key [(shift f3)] 'highlight-symbol-prev)
-(global-set-key [(meta f3)] 'highlight-symbol-query-replace)
+(use-package helm-projectile
+  :config
+  (projectile-global-mode)
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on)
+  (setq projectile-switch-project-action 'helm-projectile))
 
-(require 'multiple-cursors)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(use-package smartparens
+  :ensure smartparens
+  :config
+  (require 'smartparens-config)
+  (smartparens-global-mode 1))
 
-(require 'fastnav)
-(global-set-key "\M-z" 'fastnav-zap-up-to-char-forward)
-(global-set-key "\M-Z" 'fastnav-zap-up-to-char-backward)
-(global-set-key "\M-s" 'fastnav-jump-to-char-forward)
-(global-set-key "\M-S" 'fastnav-jump-to-char-backward)
-(global-set-key "\M-r" 'fastnav-replace-char-forward)
-(global-set-key "\M-R" 'fastnav-replace-char-backward)
-(global-set-key "\M-i" 'fastnav-insert-at-char-forward)
-(global-set-key "\M-I" 'fastnav-insert-at-char-backward)
-(global-set-key "\M-j" 'fastnav-execute-at-char-forward)
-(global-set-key "\M-J" 'fastnav-execute-at-char-backward)
-(global-set-key "\M-k" 'fastnav-delete-char-forward)
-(global-set-key "\M-K" 'fastnav-delete-char-backward)
-(global-set-key "\M-m" 'fastnav-mark-to-char-forward)
-(global-set-key "\M-M" 'fastnav-mark-to-char-backward)
+(use-package highlight-symbol
+  :bind (([(control f3)] . highlight-symbol)
+         ([f3] . highlight-symbol-next)
+         ([(shift f3)] . highlight-symbol-prev)
+         ([(meta f3)] . highlight-symbol-query-replace)))
 
-(require 'auto-indent-mode)
-(auto-indent-global-mode)
-(setq js-indent-level 2)
-(setq scss-indent-level 2)
+(use-package multiple-cursors
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
 
-(require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
+(use-package auto-indent-mode
+  :config
+  (auto-indent-global-mode)
+  (setq js-indent-level 2)
+  (setq scss-indent-level 2))
 
-(require 'web-mode) ;;-------------------------------------------------
-(add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.scss\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.css\\'" . web-mode))
+(use-package expand-region
+  :bind ("C-=" . er/expand-region))
+
+(use-package web-mode
+  :mode (("\\.phtml\\'" . web-mode)
+         ("\\.tpl\\.php\\'" . web-mode)
+         ("\\.[agj]sp\\'" . web-mode)
+         ("\\.as[cp]x\\'" . web-mode)
+         ("\\.erb\\'" . web-mode)
+         ("\\.mustache\\'" . web-mode)
+         ("\\.djhtml\\'" . web-mode)
+         ("\\.jsx\\'" . web-mode)
+         ("\\.js\\'" . web-mode)
+         ("\\.scss\\'" . web-mode)
+         ("\\.css\\'" . web-mode))
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
 
 (add-to-list 'auto-mode-alist '("\\.kml\\'" . nxml-mode))
 
-(defun my-web-mode-hook ()
-  "Hooks for Web mode."
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  )
-(add-hook 'web-mode-hook  'my-web-mode-hook)
-;; ;;---------------------------------------------------------------------
+(use-package slim-mode :init)
 
-(require 'slim-mode)
+(use-package coffee-mode :init)
 
-(require 'coffee-mode)
-(add-hook 'coffee-mode-hook
-          (lambda ()
-            (set (make-local-variable 'tab-width) 1)
-            (set (make-local-variable 'indent-tabs-mode) t)))
+(use-package yaml-mode
+  :mode ("\\.yml\\'" . yaml-mode))
 
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(use-package json-mode :init)
 
-;; (require 'haml-mode)
-;; (add-hook 'haml-mode-hook
-;;           (lambda ()
-;;             (setq indent-tabs-mode nil)
-;;             (define-key haml-mode-map "\C-m" 'newline-and-indent)))
+(use-package ace-window
+  :bind ("M-o" . ace-window)
+  :config
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;; org-mode ------------------------------------------------------------------
-(global-set-key (kbd "C-c l") 'org-store-link)
-(global-set-key (kbd "C-c a") 'org-agenda)
-(global-set-key (kbd "C-c c") 'org-capture)
+;; (global-set-key (kbd "C-c l") 'org-store-link)
+;; (global-set-key (kbd "C-c a") 'org-agenda)
+;; (global-set-key (kbd "C-c c") 'org-capture)
 ;;----------------------------------------------------------------------------
 
 ;; corfu -- ------------------------------------------------------------------
@@ -225,9 +206,6 @@
 ;; (setq make-backup-files nil) ; stop creating backup~ files
 ;; (setq auto-save-default nil) ; stop creating #autosave# files
 (setq create-lockfiles nil) ; stop creating #autosave# files
-
-(global-set-key (kbd "M-o") 'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 ;; ;; ====================================================================================
 ;; ;; ====================================================================================
