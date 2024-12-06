@@ -13,38 +13,14 @@
 (unless package-archive-contents
   (package-refresh-contents))
 
-
-;; Define a list of packages to install
-(defvar my-packages
-  '(
-    zenburn-theme
-    neotree
-    projectile
-    helm
-    helm-projectile
-    smartparens
-    highlight-symbol
-    multiple-cursors
-    auto-indent-mode
-    expand-region
-    web-mode
-    slim-mode
-    haml-mode
-    coffee-mode
-    yaml-mode
-    json-mode
-    ace-window
-    corfu
-    cape
-    )
-  "List of packages to install at startup.")
-
-;; Function to install missing packages
-(dolist (pkg my-packages)
-  (unless (package-installed-p pkg)
-    (package-install pkg)))
+(require 'use-package-ensure)
+(setq use-package-always-ensure t)
 
 ;; ;; ;;-------------------------------------------------
+
+(use-package zenburn-theme
+  :config
+  (load-theme 'zenburn t))
 
 (use-package neotree
   :bind ([f8] . neotree-toggle))
@@ -67,7 +43,6 @@
   (setq projectile-switch-project-action 'helm-projectile))
 
 (use-package smartparens
-  :ensure smartparens
   :config
   (require 'smartparens-config)
   (smartparens-global-mode 1))
@@ -134,7 +109,6 @@
 
 ;; corfu -- ------------------------------------------------------------------
 (use-package corfu
-  :ensure t
   :custom
   (corfu-auto t) ; Enable automatic completions
   (corfu-cycle t) ; Cycle through suggestions
@@ -174,7 +148,6 @@
 (setq ruby-insert-encoding-magic-comment nil)
 
 (global-display-line-numbers-mode 1)
-(load-theme 'zenburn t)
 (tool-bar-mode -1)
 (set-face-attribute 'default nil :height 110)
 
@@ -230,14 +203,13 @@
 ;; (global-set-key (kbd "C-x p a") 'copilot-accept-completion)
 ;; (global-set-key (kbd "C-x p n") 'copilot-next-completion)
 ;; (global-set-key (kbd "C-x p p") 'copilot-previous-completion)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(zenburn-theme yaml-mode web-mode smartparens slim-mode neotree multiple-cursors json-mode highlight-symbol helm-projectile haml-mode fastnav expand-region coffee-mode auto-indent-mode ace-window)))
+   '(cape corfu ace-window json-mode yaml-mode coffee-mode slim-mode web-mode expand-region auto-indent-mode multiple-cursors highlight-symbol smartparens helm-projectile projectile helm neotree zenburn-theme)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
